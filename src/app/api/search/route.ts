@@ -1,6 +1,12 @@
 import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { searchMockData, formatSources, type EchoItem } from "@/lib/mock-data";
+
+const zai = createOpenAICompatible({
+  name: "z-ai",
+  baseURL: process.env.AI_BASE_URL || "https://api.z.ai/api/coding/paas/v4",
+  apiKey: process.env.AI_API_KEY,
+});
 
 export async function POST(req: Request) {
   const { query } = await req.json();
@@ -29,16 +35,17 @@ Be conversational but concise. Use bullet points for lists. Always cite which so
     ? `Here is the relevant context from the user's workspace:\n\n${contextBlock}\n\nSources found: ${sources}\n\nUser's question: "${query}"\n\nAnswer based on the context above. Be specific about dates, people, and actions.`
     : `The user asked: "${query}"\n\nNo relevant results were found in their workspace data. Respond helpfully — suggest they try rephrasing or ask about specific people, projects, or topics.`;
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.AI_API_KEY;
 
   if (!apiKey) {
-    // Fallback: generate a helpful response without AI when no API key is configured
     const fallback = generateFallbackResponse(query, results, sources);
     return Response.json({ answer: fallback, sources, results: results.length });
   }
 
+  const modelName = process.env.AI_MODEL || "glm-5-turbo";
+
   const result = streamText({
-    model: openai("gpt-4o-mini"),
+    model: zai.chatModel(modelName),
     system: systemPrompt,
     prompt: userPrompt,
   });
