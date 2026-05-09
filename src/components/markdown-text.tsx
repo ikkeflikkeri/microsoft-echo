@@ -20,7 +20,7 @@ function parseInline(text: string): React.ReactNode[] {
       nodes.push(
         <code
           key={key++}
-          className="rounded bg-black/5 px-1.5 py-0.5 text-[0.875em] font-mono dark:bg-white/10"
+          className="rounded bg-black/5 px-1.5 py-0.5 text-[0.875em] font-mono"
         >
           {codeMatch[2]}
         </code>

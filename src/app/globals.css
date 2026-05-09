@@ -27,23 +27,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a12;
-    --foreground: #e8e8f0;
-    --accent: #4ea8e6;
-    --accent-light: #1a2a3a;
-    --surface: #12121e;
-    --muted: #9ca3af;
-    --border: rgba(255, 255, 255, 0.06);
-    --source-email: #4ea8e6;
-    --source-chat: #a78bfa;
-    --source-meeting: #34d399;
-    --source-document: #fbbf24;
-    --source-calendar: #f87171;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
